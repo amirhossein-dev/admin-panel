@@ -1,0 +1,217 @@
+<p-card [header]="cardHeader">
+    <div class="flex align-items-center justify-content-end mb-3">
+        <p-button
+            icon="pi pi-plus"
+            (click)="toggleCreateNewGroupSection()"
+        ></p-button>
+    </div>
+    <div
+        class="flex align-items-center justify-content-center"
+        *ngIf="dataToggle"
+    >
+        <p-progressSpinner
+            styleClass="custom-spinner"
+            strokeWidth="8"
+            fill="var(--surface-ground)"
+            animationDuration=".5s"
+        ></p-progressSpinner>
+    </div>
+    <p-table
+        *ngIf="!dataToggle"
+        [value]="allUserGroups"
+        [scrollable]="true"
+        scrollHeight="400px"
+        [virtualScroll]="true"
+        [rowHover]="true"
+        styleClass="p-datatable-gridlines"
+        [virtualScrollItemSize]="46"
+    >
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th style="width: 2%">ردیف</th>
+                <th style="width: 20%">نام گروه</th>
+                <th style="width: 20%">تعداد اعضا</th>
+                <th style="width: 20%">عملیات</th>
+            </tr>
+        </ng-template>
+
+        <ng-template
+            pTemplate="body"
+            let-rowData
+            let-rowIndex="rowIndex"
+            let-columns="columns"
+            let-index="index"
+        >
+            <tr style="height: 46px">
+                <td>
+                    {{ rowIndex + 1 }}
+                </td>
+                <td>
+                    {{ rowData.groupName }}
+                </td>
+                <td>
+                    {{ rowData.groupMembersCount }}
+                </td>
+                <td>
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-cog"
+                        class="p-button-rounded p-button-info p-button-text"
+                        pTooltip="تنظیمات گروه"
+                        (click)="selectedRowFunction(rowData)"
+                    ></button>
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-text"
+                        pTooltip="حذف گروه"
+                        (click)="deleteSelectedGroup($event, rowData)"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+<p-dialog
+    header="تنظیمات گروه"
+    [(visible)]="displayPosition"
+    [modal]="true"
+    [style]="{ width: '70vw', direction: 'rtl' }"
+    [baseZIndex]="10000"
+    [draggable]="false"
+    [resizable]="false"
+>
+    <div class="flex">
+        <div>
+            <form>
+                <input
+                    type="text"
+                    pInputText
+                    placeholder="کاربر مورد نظر را جستجو کنید"
+                />
+            </form>
+        </div>
+        <div class="custom-font-size">
+            <span>عنوان گروه : </span>
+            <span>{{ selectedGroupName }}</span>
+            <button
+                pButton
+                pRipple
+                type="button"
+                pTooltip="تغییر نام گروه"
+                [showDelay]="1000"
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-primary p-button-text mx-3 custom-padding"
+                (click)="changeSelectedGroupName()"
+            ></button>
+        </div>
+        <div
+            *ngIf="toggleChangeNameSection"
+            class="fadeinright fadeoutleft animation-duration-300"
+        >
+            <form
+                [formGroup]="changeUserGroupName"
+                (ngSubmit)="onSubmitChangeUserGroupName()"
+            >
+                <input
+                    pInputText
+                    type="text"
+                    placeholder="نام جدید را وارد کنید"
+                    formControlName="groupName"
+                />
+                <button pButton class="mx-3" [loading]="changeGroupNameLoading">
+                    ثبت
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <p-table
+            [value]="usersOfSelectedGroup"
+            *ngIf="visible"
+            styleClass="p-datatable-gridlines"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ردیف</th>
+                    <th>نام کاربر</th>
+                    <th>نام خانوادگی</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data let-userIndex="rowIndex">
+                <tr>
+                    <td>{{ userIndex + 1 }}</td>
+                    <td>{{ data.firstName || "--" }}</td>
+                    <td>{{ data.lastName || "--" }}</td>
+                    <td>{{ data.isActive | userStatus }}</td>
+                    <td>
+                        <p-button
+                            icon="pi pi-trash"
+                            pTooltip="حذف کاربر"
+                            (click)="confirm($event, data)"
+                            styleClass="p-button-rounded p-button-danger p-button-text"
+                        ></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div *ngIf="!hasMember" class="group-has-no-member-message p-3">
+            <p>گروه مورد نظر هیچ عضوی ندارد</p>
+        </div>
+    </div>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-confirmPopup> </p-confirmPopup>
+<p-dialog
+    header="تنظیمات گروه"
+    [(visible)]="createNewGroupToggle"
+    [modal]="true"
+    [style]="{ width: '70vw', direction: 'rtl' }"
+    [baseZIndex]="10000"
+    [draggable]="false"
+    [resizable]="false"
+>
+    <form
+        [formGroup]="createNewUserGroupFormGroup"
+        (ngSubmit)="createNewUserGroup()"
+    >
+        <div class="flex justify-content-between">
+            <div class="flex flex-column gap-2 align-items-center">
+                <input
+                    #createGroupInput
+                    id="newGroupName"
+                    type="text"
+                    pInputText
+                    formControlName="groupName"
+                    aria-describedby="newGroupName-help"
+                />
+                <small id="newGroupName-help">فقط کلمات لاتین</small>
+            </div>
+            <div>
+                <button
+                    pButton
+                    pTooltip="تنظیمات گروه"
+                    [disabled]="!createNewUserGroupFormGroup.valid"
+                    type="submit"
+                    class="mx-3"
+                    placeholder="نام گروه "
+                    [loading]="createGroupLoading"
+                >
+                    ثبت
+                </button>
+                <p-button
+                    label="انصراف"
+                    styleClass="p-button-danger"
+                    (click)="dismissModal()"
+                ></p-button>
+            </div>
+        </div></form
+></p-dialog>

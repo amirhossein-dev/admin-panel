@@ -1,0 +1,84 @@
+<div class="layout-topbar">
+    <div
+        #topbarmenu
+        class="layout-topbar-menu"
+        [ngClass]="{
+            'layout-topbar-menu-mobile-active':
+                layoutService.state.profileSidebarVisible
+        }"
+    >
+        <div class="flex align-items-center">
+            <button
+                icon="pi pi-minus"
+                type="button"
+                pButton
+                (click)="decrementScale()"
+                class="p-button-text p-button-rounded w-2rem h-2rem mr-2"
+                [disabled]="scale === scales[0]"
+            ></button>
+            <div class="flex gap-2 align-items-center">
+                <i
+                    class="pi pi-circle-fill text-300"
+                    *ngFor="let s of scales"
+                    [ngClass]="{ 'text-primary-500': s === scale }"
+                ></i>
+            </div>
+            <button
+                icon="pi pi-plus"
+                type="button"
+                pButton
+                (click)="incrementScale()"
+                class="p-button-text p-button-rounded w-2rem h-2rem ml-2"
+                [disabled]="scale === scales[scales.length - 1]"
+            ></button>
+        </div>
+
+        <div class="nightModeToggle">
+            <i class="pi pi-sun nightModeIcons-day pb-2"></i>
+            <p-inputSwitch (click)="nightModeToggle()" class=""></p-inputSwitch>
+            <i class="pi pi-moon nightModeIcons-night pb-2"></i>
+        </div>
+        <button class="p-link layout-topbar-button" (click)="navigate()">
+            <i class="pi pi-home" style="color: rgb(175, 2, 2)"></i>
+            <!-- <span>Calendar</span> -->
+        </button>
+        <button class="p-link layout-topbar-button">
+            <i class="pi pi-calendar"></i>
+            <span>Calendar</span>
+        </button>
+        <button
+            [routerLink]="'/profile'"
+            tooltipPosition="bottom"
+            pTooltip="پروفایل کاربری"
+            class="p-link layout-topbar-button"
+        >
+            <i class="pi pi-user"></i>
+            <span>Profile</span>
+        </button>
+        <button
+            class="p-link layout-topbar-button"
+            (click)="logout()"
+            style="color: rgb(175, 2, 2)"
+            pTooltip="خروج از سیستم "
+        >
+            <i class="pi pi-power-off"></i>
+            <span>Settings</span>
+        </button>
+    </div>
+
+    <button
+        #topbarmenubutton
+        class="p-link layout-topbar-menu-button layout-topbar-button"
+        (click)="layoutService.showProfileSidebar()"
+    >
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <button
+        #menubutton
+        class="p-link layout-menu-button layout-topbar-button md:hidden"
+        (click)="layoutService.onMenuToggle()"
+    >
+        <i class="pi pi-bars"></i>
+    </button>
+</div>

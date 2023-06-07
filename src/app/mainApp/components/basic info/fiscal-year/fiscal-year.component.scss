@@ -1,0 +1,31 @@
+* {
+    direction: rtl;
+}
+.rtl {
+    direction: rtl;
+}
+
+.modified {
+    max-height: 12px;
+}
+
+.table-container {
+    position: relative;
+    min-height: 57px;
+    max-height: 285px;
+    overflow: hidden;
+}
+
+.custom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.table-container thead th {
+    top: 0;
+    position: sticky;
+    z-index: 1;
+    background-color: red !important;
+}

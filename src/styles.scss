@@ -1,0 +1,50 @@
+/* add global styles , import other style files */
+
+$gutter: 1rem; //for primeflex grid system
+@import "assets/layout/styles/layout/layout.scss";
+
+/* PrimeNG */
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+
+@import "assets/fonts/IRANSans/WebFonts/css/fontiran.css";
+@import "assets/layout/styles/layout/preloading";
+* {
+    font-family: IRANSans, Kalameh-Regular, sans-serif;
+}
+
+td,
+th {
+    text-align: center !important;
+}
+
+thead {
+    font-size: 1.3rem;
+    position: sticky;
+}
+th {
+    background-color: #d0d0d0 !important;
+}
+
+.margin-fix {
+    margin-right: 3rem;
+}
+
+.captcha-config {
+    right: 180px;
+    top: 23px;
+    cursor: pointer;
+}
+
+.inner-padding-input {
+    padding: 0.5rem !important;
+}
+
+.m-config {
+    margin-right: 1rem;
+}
+.p-dialog-header-close-icon {
+    font-weight: 800 !important;
+    font-size: large !important;
+}

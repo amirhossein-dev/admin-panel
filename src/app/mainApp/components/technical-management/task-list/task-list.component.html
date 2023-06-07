@@ -1,0 +1,156 @@
+<div class="card">
+    <p-tabView>
+        <p-tabPanel header="جاری">
+            <div class="mt-4">
+                <p-table
+                    [value]="tasks"
+                    [scrollable]="true"
+                    scrollHeight="400px"
+                    [virtualScroll]="true"
+                    [rowHover]="true"
+                    styleClass="p-datatable-gridlines"
+                    class="mt-4"
+                    [virtualScrollItemSize]="46"
+                    [tableStyle]="{ 'min-width': '50rem' }"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>تاریخ</th>
+                            <th>عنوان تسک</th>
+                            <th>شخص تخصیص</th>
+                            <th>گروه تخصیص</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData>
+                        <tr>
+                            <td>{{ rowData.date }}</td>
+                            <td>{{ rowData.taskTitle }}</td>
+                            <td>{{ rowData.isPersonAssigned || "--" }}</td>
+                            <td>{{ rowData.isGroupAssigned || "--" }}</td>
+                            <td>
+                                <button
+                                    pButton
+                                    (click)="toggleModal = !toggleModal"
+                                >
+                                    ارجاع
+                                </button>
+                                <button
+                                    pButton
+                                    class="mr-1"
+                                    pTooltip="تخصیص به گروه دیگر"
+                                >
+                                    تخصیص گروه
+                                </button>
+                                <button
+                                    pButton
+                                    class="mr-1"
+                                    pTooltip="تخصیص به شخص دیگر"
+                                    tooltipPosition="top"
+                                >
+                                    تخصیص شخص
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="بایگانی">
+            <p-table
+                [value]="tasks"
+                [scrollable]="true"
+                scrollHeight="400px"
+                [virtualScroll]="true"
+                [rowHover]="true"
+                styleClass="p-datatable-gridlines"
+                class="mt-4"
+                [virtualScrollItemSize]="46"
+                [tableStyle]="{ 'min-width': '50rem' }"
+            >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>تاریخ</th>
+                        <th>عنوان تسک</th>
+                        <th>شخص تخصیص</th>
+                        <th>گروه تخصیص</th>
+                        <th>عملیات</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td>{{ rowData.date }}</td>
+                        <td>{{ rowData.taskTitle }}</td>
+                        <td>{{ rowData.isPersonAssigned || "--" }}</td>
+                        <td>{{ rowData.isGroupAssigned || "--" }}</td>
+                        <td>
+                            <button
+                                pButton
+                                (click)="toggleModal = !toggleModal"
+                            >
+                                ارجاع
+                            </button>
+                            <button
+                                pButton
+                                class="mr-1"
+                                pTooltip="تخصیص به گروه دیگر"
+                            >
+                                تخصیص گروه
+                            </button>
+                            <button
+                                pButton
+                                class="mr-1"
+                                pTooltip="تخصیص به شخص دیگر"
+                                tooltipPosition="top"
+                            >
+                                تخصیص شخص
+                            </button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<p-dialog
+    header="ارجاع"
+    [(visible)]="toggleModal"
+    [modal]="true"
+    [style]="{ width: '40vw', height: '70vh', direction: 'rtl' }"
+    [baseZIndex]="10000"
+    [draggable]="false"
+    [resizable]="false"
+>
+    <div class="">
+        <form [formGroup]="formGroup">
+            <div class="flex justify-content-between">
+                <div>
+                    <p-dropdown
+                        formControlName="selectedGroup"
+                        [options]="groups"
+                        optionLabel="name"
+                        placeholder="گروه را انتخاب کنید"
+                    ></p-dropdown>
+                </div>
+                <div>
+                    <button
+                        pButton
+                        pTooltip="تنظیمات گروه"
+                        [disabled]="!formGroup.valid"
+                        type="submit"
+                        class="mx-3"
+                        placeholder="نام گروه "
+                    >
+                        ثبت
+                    </button>
+                    <p-button
+                        label="انصراف"
+                        styleClass="p-button-danger"
+                        (click)="dismissModal()"
+                    ></p-button>
+                </div>
+            </div>
+        </form>
+    </div>
+</p-dialog>
