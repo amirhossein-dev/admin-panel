@@ -1,0 +1,68 @@
+<div class="card">
+    <h5>ناحیه کاربری</h5>
+    <p>نام کاربری</p>
+</div>
+
+<p-card [header]="header">
+    <div class="flex flex-column justify-content-center">
+        <form
+            [formGroup]="changePasswordFormGroup"
+            (ngSubmit)="onSubmitChangePassword()"
+        >
+            <div class="flex justify-content-center">
+                <input
+                    #changePassword
+                    formControlName="newPassword"
+                    id="changePassword"
+                    type="text"
+                    placeholder="رمز عبور جدید"
+                    pInputText
+                    class="w-full md:w-30rem mb-5"
+                    style="padding: 1rem"
+                    autocomplete="off"
+                />
+            </div>
+            <div class="flex flex-row-reverse justify-content-center py-5">
+                <img [src]="hashImageSrc" class="captcha-config" />
+
+                <div class="pt-2">
+                    <i
+                        (click)="generateCaptcha()"
+                        class="pi pi-refresh"
+                        style="
+                            font-size: 2rem;
+                            position: relative;
+                            cursor: pointer;
+                        "
+                    ></i>
+                </div>
+                <span class="p-float-label" style="direction: rtl">
+                    <input
+                        (keypress)="numberOnly($event)"
+                        formControlName="captchaValue"
+                        maxlength="6"
+                        id="captchaValue"
+                        type="text"
+                        pInputText
+                        mode="decimal"
+                    />
+
+                    <label for="captchaValue" style="margin-left: 1.813rem"
+                        >عدد تصویر را وارد نمائید
+                    </label>
+                </span>
+            </div>
+            <div class="flex justify-content-end">
+                <button
+                    type="submit"
+                    pButton
+                    label="ثبت"
+                    [disabled]="!changePasswordFormGroup.valid"
+                    [loading]="isLoading"
+                ></button>
+            </div>
+        </form>
+    </div>
+</p-card>
+
+<p-toast key="changePasswordInfo"></p-toast>

@@ -1,0 +1,20 @@
+export interface IUserInfo {
+    lastName: string,
+    fatherName: string,
+    nationalCode: string,
+    registerationPlaceId: null | string,
+    registerationSeri: null | string,
+    postalCode: null | string,
+    mobile: string,
+    dead: boolean,
+    birthDate: string,
+    lastActorUserId: null | string,
+    lastActionTime: number,
+    firstName: string,
+    postalAddress: null | string,
+    genderTypeId: number,
+    id: number,
+    bimeCode: null | number,
+    registerationNumber: null | number,
+    lastActionType: string
+}
